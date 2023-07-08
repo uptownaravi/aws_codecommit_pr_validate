@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    ACCOUNT_ID: ""
+
+phases:
+  install:
+    commands:
+      - echo Build started on `date`
+      - echo "install hado lint"
+      - yum update -y
+      - wget https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+      - chmod u+x hadolint-Linux-x86_64
+  pre_build:
+    on-failure: CONTINUE
+    commands:
+      - echo "run hado lint"
+      - printenv
+      - output=$(./hadolint-Linux-x86_64 Dockerfile | awk -F ' ' '{print $2}')
+      - echo $output
+  build:
+    commands:
+      - echo "push the output file as comment to pr"
+      - echo "aws codecommit post-comment-for-pull-request --pull-request-id $pullRequestId --repository-name $repositoryName --before-commit-id $destinationCommit --after-commit-id $sourceCommit --content $output"
+      - aws codecommit post-comment-for-pull-request --pull-request-id $pullRequestId --repository-name $repositoryName --before-commit-id $destinationCommit --after-commit-id $sourceCommit --content "$output"
+  post_build:
+    commands:
+      - echo Build completed on `date`
