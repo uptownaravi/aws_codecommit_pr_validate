@@ -1,0 +1,34 @@
+#policy to start code build
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "arn:aws:logs:< region >:< account number >:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:< region >:< account number >:log-group:/aws/lambda/< function name >:*"
+            ]
+        },
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": [
+                "codecommit:PostCommentForPullRequest",
+                "codebuild:StartBuild"
+            ],
+            "Resource": [
+                "arn:aws:codecommit:< region >:< account number >:python",
+                "arn:aws:codebuild:< region >:< account number >:project/< project name >"
+            ]
+        }
+    ]
+}
