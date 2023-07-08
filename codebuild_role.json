@@ -1,0 +1,16 @@
+# policy for pr comment on codecommit
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "codecommit:PostCommentForPullRequest",
+                "codecommit:ListPullRequests",
+                "codecommit:GetPullRequest"
+            ],
+            "Resource": "arn:aws:codecommit:< region >:<account number>:< repo name>"
+        }
+    ]
+}
